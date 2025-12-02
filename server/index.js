@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import sequelize from "./config/db.js";
 import Tarea from "./models/Tarea.js";
+import tareaRoutes from "./routes/tareaRoutes.js";
 
 dotenv.config();
 
@@ -17,6 +18,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({ mensaje: "Servidor To-Do List funcionando correctamente" });
 });
+
+// Rutas de la API
+app.use("/api/tareas", tareaRoutes);
 
 // Sincronización con la base de datos
 const iniciarServidor = async () => {
