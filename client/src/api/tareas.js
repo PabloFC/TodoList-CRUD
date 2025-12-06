@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/tareas";
+const API_URL = "/api/tareas";
 
 // GET - Obtener todas las tareas
 export const obtenerTareas = async () => {
