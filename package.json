@@ -4,8 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "install:server": "cd server && npm install",
-    "install:client": "cd client && npm install",
-    "build": "npm run install:server && npm run install:client && cd client && npm run build"
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "build": "cd client && npm install && npm run build",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install"
   }
 }

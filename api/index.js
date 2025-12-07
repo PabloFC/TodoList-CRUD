@@ -1,24 +1,54 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import sequelize from "../server/config/db.js";
+import { Sequelize } from "sequelize";
 import tareaRoutes from "../server/routes/tareaRoutes.js";
-
-dotenv.config();
 
 const app = express();
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Inicializar la conexión a la base de datos
-sequelize
-  .authenticate()
-  .then(() => console.log("✅ DB conectada"))
-  .catch((err) => console.error("❌ Error DB:", err));
+// Conexión a la base de datos
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgres",
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
+  logging: false,
+});
 
-sequelize.sync({ alter: true });
+// Inicializar DB (solo en la primera llamada)
+let dbInitialized = false;
 
+const initDB = async () => {
+  if (!dbInitialized) {
+    try {
+      await sequelize.authenticate();
+      await sequelize.sync({ alter: true });
+      dbInitialized = true;
+      console.log("✅ DB inicializada");
+    } catch (error) {
+      console.error("❌ Error DB:", error);
+    }
+  }
+};
+
+// Middleware para inicializar DB antes de cada request
+app.use(async (req, res, next) => {
+  await initDB();
+  next();
+});
+
+// Ruta de prueba
+app.get("/api", (req, res) => {
+  res.json({ mensaje: "API funcionando correctamente" });
+});
+
+// Rutas de tareas
 app.use("/api/tareas", tareaRoutes);
 
 export default app;
