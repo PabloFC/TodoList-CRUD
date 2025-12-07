@@ -8,7 +8,6 @@ import tareaRoutes from "./routes/tareaRoutes.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors());
@@ -31,12 +30,19 @@ const iniciarServidor = async () => {
     await sequelize.sync({ alter: true });
     console.log("✅ Modelos sincronizados con la base de datos.");
 
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-    });
+    // Solo iniciar el servidor si no estamos en un ambiente serverless
+    if (process.env.NODE_ENV !== "production") {
+      const PORT = process.env.PORT || 5000;
+      app.listen(PORT, () => {
+        console.log(`Servidor corriendo en el puerto ${PORT}`);
+      });
+    }
   } catch (error) {
     console.error("❌ Error al conectar con la base de datos:", error);
   }
 };
 
 iniciarServidor();
+
+// Exportar la app para Vercel
+export default app;
