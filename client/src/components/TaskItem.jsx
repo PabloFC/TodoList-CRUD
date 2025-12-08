@@ -2,13 +2,11 @@ import { actualizarTarea, eliminarTarea } from "../api/tareas";
 
 function TaskItem({ tarea, recargarTareas }) {
   const handleToggleCompletada = async () => {
-    console.log('🔄 Intentando actualizar tarea:', tarea.id, 'completada:', !tarea.completada);
     try {
       await actualizarTarea(tarea.id, { completada: !tarea.completada });
-      console.log('✅ Tarea actualizada, recargando lista...');
       recargarTareas();
     } catch (error) {
-      console.error("❌ Error al actualizar tarea:", error);
+      console.error("Error al actualizar tarea:", error);
       alert("Error al actualizar la tarea");
     }
   };
