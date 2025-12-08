@@ -1,5 +1,13 @@
 .github/
 features.md
 node_modules/
-.env
 server/.env
+.env
+client/dist/
+client/build/
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

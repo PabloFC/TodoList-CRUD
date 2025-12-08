@@ -4,10 +4,23 @@ import { Sequelize, DataTypes } from "sequelize";
 
 const app = express();
 
-app.use(cors());
+// Middlewares
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
-// Configurar Sequelize
+// Log para debugging
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
+// Configurar Sequelize con manejo de errores
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   dialectOptions: {
@@ -17,9 +30,15 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
     },
   },
   logging: false,
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
 });
 
-// Definir el modelo Tarea directamente aquí
+// Modelo Tarea
 const Tarea = sequelize.define(
   "Tarea",
   {
@@ -38,16 +57,16 @@ const Tarea = sequelize.define(
   }
 );
 
-// Inicializar DB
+// Inicializar DB una sola vez
 let dbInitialized = false;
-
 const initDB = async () => {
   if (!dbInitialized) {
     try {
       await sequelize.authenticate();
-      await sequelize.sync({ alter: true });
+      console.log("✅ Conexión a DB establecida");
+      await sequelize.sync({ alter: false });
+      console.log("✅ Modelos sincronizados");
       dbInitialized = true;
-      console.log("✅ DB conectada");
     } catch (error) {
       console.error("❌ Error DB:", error);
       throw error;
@@ -55,12 +74,20 @@ const initDB = async () => {
   }
 };
 
-// Rutas de la API
+// Ruta raíz de la API
 app.get("/api", (req, res) => {
-  res.json({ mensaje: "API funcionando" });
+  res.json({
+    mensaje: "API funcionando correctamente",
+    endpoints: [
+      "GET /api/tareas",
+      "POST /api/tareas",
+      "PUT /api/tareas/:id",
+      "DELETE /api/tareas/:id",
+    ],
+  });
 });
 
-// GET - Obtener todas las tareas
+// GET todas las tareas
 app.get("/api/tareas", async (req, res) => {
   try {
     await initDB();
@@ -69,12 +96,15 @@ app.get("/api/tareas", async (req, res) => {
     });
     res.json(tareas);
   } catch (error) {
-    console.error("Error al obtener tareas:", error);
-    res.status(500).json({ error: "Error al obtener tareas" });
+    console.error("Error GET /api/tareas:", error);
+    res.status(500).json({
+      error: "Error al obtener tareas",
+      details: error.message,
+    });
   }
 });
 
-// POST - Crear una tarea
+// POST crear tarea
 app.post("/api/tareas", async (req, res) => {
   try {
     await initDB();
@@ -84,10 +114,11 @@ app.post("/api/tareas", async (req, res) => {
       return res.status(400).json({ error: "El texto es requerido" });
     }
 
-    const nuevaTarea = await Tarea.create({ texto });
+    const nuevaTarea = await Tarea.create({ texto: texto.trim() });
+    console.log("✅ Tarea creada:", nuevaTarea.id);
     res.status(201).json(nuevaTarea);
   } catch (error) {
-    console.error("Error al crear tarea:", error);
+    console.error("Error POST /api/tareas:", error);
     res.status(500).json({
       error: "Error al crear tarea",
       details: error.message,
@@ -95,7 +126,7 @@ app.post("/api/tareas", async (req, res) => {
   }
 });
 
-// PUT - Actualizar una tarea
+// PUT actualizar tarea
 app.put("/api/tareas/:id", async (req, res) => {
   try {
     await initDB();
@@ -108,22 +139,22 @@ app.put("/api/tareas/:id", async (req, res) => {
       return res.status(404).json({ error: "Tarea no encontrada" });
     }
 
-    if (completada !== undefined) {
-      tarea.completada = completada;
-    }
-    if (texto !== undefined) {
-      tarea.texto = texto;
-    }
+    if (completada !== undefined) tarea.completada = completada;
+    if (texto !== undefined) tarea.texto = texto.trim();
 
     await tarea.save();
+    console.log("✅ Tarea actualizada:", id);
     res.json(tarea);
   } catch (error) {
-    console.error("Error al actualizar tarea:", error);
-    res.status(500).json({ error: "Error al actualizar tarea" });
+    console.error("Error PUT /api/tareas:", error);
+    res.status(500).json({
+      error: "Error al actualizar tarea",
+      details: error.message,
+    });
   }
 });
 
-// DELETE - Eliminar una tarea
+// DELETE eliminar tarea
 app.delete("/api/tareas/:id", async (req, res) => {
   try {
     await initDB();
@@ -136,11 +167,20 @@ app.delete("/api/tareas/:id", async (req, res) => {
     }
 
     await tarea.destroy();
+    console.log("✅ Tarea eliminada:", id);
     res.json({ mensaje: "Tarea eliminada correctamente" });
   } catch (error) {
-    console.error("Error al eliminar tarea:", error);
-    res.status(500).json({ error: "Error al eliminar tarea" });
+    console.error("Error DELETE /api/tareas:", error);
+    res.status(500).json({
+      error: "Error al eliminar tarea",
+      details: error.message,
+    });
   }
+});
+
+// Manejo de rutas no encontradas
+app.use((req, res) => {
+  res.status(404).json({ error: "Ruta no encontrada" });
 });
 
 export default app;
