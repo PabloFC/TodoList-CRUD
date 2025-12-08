@@ -44,5 +44,5 @@ const iniciarServidor = async () => {
 
 iniciarServidor();
 
-// Exportar la app para Vercel
+// Exportar la app (ya no necesario para Render, pero lo dejamos por compatibilidad)
 export default app;
