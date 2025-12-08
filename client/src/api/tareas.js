@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL 
+// Reemplaza esta URL con la URL real que te dio Render
+const API_URL = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL}/api/tareas`
-  : '/api/tareas';
+  : "https://todolist-crud.onrender.com/api/tareas";
 
 export const obtenerTareas = async () => {
   const response = await axios.get(API_URL);
