@@ -15,8 +15,8 @@ export const crearTarea = async (texto) => {
 };
 
 // PUT - Actualizar una tarea
-export const actualizarTarea = async (id, completada) => {
-  const response = await axios.put(`${API_URL}/${id}`, { completada });
+export const actualizarTarea = async (id, datos) => {
+  const response = await axios.put(`${API_URL}/${id}`, datos);
   return response.data;
 };
 

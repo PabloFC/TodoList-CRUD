@@ -49,11 +49,3 @@ function App() {
 }
 
 export default App;
-
-// Asegúrate de que todas las llamadas a la API usen rutas relativas como:
-// axios.get('/api/tareas')
-// axios.post('/api/tareas', ...)
-// axios.put(`/api/tareas/${id}`, ...)
-// axios.delete(`/api/tareas/${id}`)
-
-// NO uses: 'http://localhost:3000/api/tareas'
