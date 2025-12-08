@@ -16,18 +16,8 @@ export const crearTarea = async (texto) => {
 };
 
 export const actualizarTarea = async (id, datos) => {
-  console.log("Actualizando tarea:", id, datos); // Debug
-  try {
-    const response = await axios.put(`${API_URL}/${id}`, datos);
-    console.log("Respuesta:", response.data); // Debug
-    return response.data;
-  } catch (error) {
-    console.error(
-      "Error al actualizar:",
-      error.response?.data || error.message
-    );
-    throw error;
-  }
+  const response = await axios.put(`${API_URL}/${id}`, datos);
+  return response.data;
 };
 
 export const eliminarTarea = async (id) => {
