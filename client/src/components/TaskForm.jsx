@@ -23,18 +23,18 @@ function TaskForm({ recargarTareas }) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-purple-100">
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-indigo-100">
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="text"
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
           placeholder="¿Qué necesitas hacer hoy?"
-          className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+          className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-gray-400"
         />
         <button
           type="submit"
-          className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:scale-105 flex items-center gap-2"
+          className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-lg hover:from-indigo-700 hover:to-indigo-600 transition-all font-semibold shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95 flex items-center gap-2"
         >
           <svg
             className="w-5 h-5"

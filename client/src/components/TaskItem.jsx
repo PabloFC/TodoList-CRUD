@@ -24,12 +24,12 @@ function TaskItem({ tarea, recargarTareas }) {
   };
 
   return (
-    <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg hover:from-purple-50 hover:to-blue-50 transition-all duration-200 border border-gray-200 hover:border-purple-300 shadow-sm hover:shadow-md">
+    <div className="flex items-center gap-3 p-4 bg-white rounded-lg hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 transition-all duration-200 border border-gray-200 hover:border-indigo-300 shadow-sm hover:shadow-md group">
       <input
         type="checkbox"
         checked={tarea.completada}
         onChange={handleToggleCompletada}
-        className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500 cursor-pointer transition-transform hover:scale-110"
+        className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer transition-transform hover:scale-110"
       />
       <span
         className={`flex-1 text-lg ${
@@ -42,7 +42,7 @@ function TaskItem({ tarea, recargarTareas }) {
       </span>
       <button
         onClick={handleEliminar}
-        className="px-4 py-2 text-red-500 hover:text-white hover:bg-red-500 rounded-lg font-medium transition-all duration-200 border border-red-300 hover:border-red-500 transform hover:scale-105 flex items-center gap-2"
+        className="px-4 py-2 text-rose-600 hover:text-white hover:bg-rose-500 rounded-lg font-medium transition-all duration-200 border border-rose-200 hover:border-rose-500 transform hover:scale-105 active:scale-95 opacity-0 group-hover:opacity-100 flex items-center gap-2"
       >
         <svg
           className="w-4 h-4"
