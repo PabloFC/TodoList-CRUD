@@ -6,9 +6,9 @@ function TaskList({ tareas, recargarTareas }) {
 
   if (tareas.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-500 bg-white rounded-xl shadow-lg border-2 border-dashed border-gray-200">
+      <div className="text-center py-16 animate-fade-in">
         <svg
-          className="w-20 h-20 mx-auto mb-4 text-gray-300"
+          className="w-24 h-24 mx-auto text-gray-300 mb-4"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -17,11 +17,11 @@ function TaskList({ tareas, recargarTareas }) {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={1.5}
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
           />
         </svg>
-        <p className="text-xl font-medium">No hay tareas pendientes</p>
-        <p className="text-sm mt-2">¡Agrega una nueva tarea para empezar!</p>
+        <p className="text-gray-400 text-xl font-medium">No hay tareas pendientes</p>
+        <p className="text-gray-300 text-sm mt-2">¡Agrega tu primera tarea arriba! 🎯</p>
       </div>
     );
   }
@@ -52,12 +52,14 @@ function TaskList({ tareas, recargarTareas }) {
         </div>
       </div>
       <div className="space-y-3">
-        {tareas.map((tarea) => (
-          <TaskItem
+        {tareas.map((tarea, index) => (
+          <div
             key={tarea.id}
-            tarea={tarea}
-            recargarTareas={recargarTareas}
-          />
+            className="animate-slide-in"
+            style={{ animationDelay: `${index * 50}ms` }}
+          >
+            <TaskItem tarea={tarea} recargarTareas={recargarTareas} />
+          </div>
         ))}
       </div>
     </div>
