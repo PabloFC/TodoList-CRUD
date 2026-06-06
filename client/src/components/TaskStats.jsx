@@ -1,8 +1,5 @@
-function TaskStats({ tareas }) {
-  const total = tareas.length;
-  const completadas = tareas.filter(t => t.completada).length;
-  const pendientes = total - completadas;
-  const porcentaje = total > 0 ? Math.round((completadas / total) * 100) : 0;
+function TaskStats({ estadisticas }) {
+  const { total, completadas, pendientes, porcentaje } = estadisticas;
 
   return (
     <div className="grid grid-cols-3 gap-4 mb-6">
@@ -23,7 +20,7 @@ function TaskStats({ tareas }) {
           <div className="text-2xl font-bold">{porcentaje}%</div>
           <div className="text-sm mt-1">Progreso completado</div>
           <div className="w-full bg-white/30 rounded-full h-2 mt-3">
-            <div 
+            <div
               className="bg-white h-2 rounded-full transition-all duration-500"
               style={{ width: `${porcentaje}%` }}
             />

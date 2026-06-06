@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { crearTarea } from "../api/tareas";
+import { useTareas } from "../context/TareasContext";
 
-function TaskForm({ recargarTareas }) {
+function TaskForm() {
   const [texto, setTexto] = useState("");
+  const { crearNuevaTarea } = useTareas();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,12 +14,11 @@ function TaskForm({ recargarTareas }) {
     }
 
     try {
-      await crearTarea(texto);
-      setTexto(""); // Limpiar el input
-      recargarTareas(); // Recargar la lista de tareas
+      await crearNuevaTarea(texto);
+      setTexto("");
     } catch (error) {
       console.error("Error al crear tarea:", error);
-      alert("Error al crear la tarea");
+      alert(error.message || "Error al crear la tarea");
     }
   };
 
