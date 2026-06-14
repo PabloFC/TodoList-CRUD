@@ -22,15 +22,10 @@ export const crearTarea = async (req, res) => {
   try {
     const { texto } = req.body;
 
-    // Validar que el texto no esté vacío
-    if (!texto || texto.trim() === "") {
-      return res
-        .status(400)
-        .json({ error: "El texto de la tarea es requerido" });
-    }
+    const textoNormalizado = texto.trim();
 
     // Crear la tarea en la base de datos
-    const nuevaTarea = await Tarea.create({ texto });
+    const nuevaTarea = await Tarea.create({ texto: textoNormalizado });
 
     // Devolver la tarea creada
     res.status(201).json(nuevaTarea);
@@ -56,7 +51,7 @@ export const actualizarTarea = async (req, res) => {
     }
 
     // Actualizar el estado de la tarea
-    await tarea.update({ completada });
+    await tarea.update({ completada: completada === true || completada === "true" });
 
     res.status(200).json(tarea);
   } catch (error) {
