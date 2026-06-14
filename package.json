@@ -3,5 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "build": "cd client && npm run build"
+  },
+  "devDependencies": {
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.8"
   }
 }

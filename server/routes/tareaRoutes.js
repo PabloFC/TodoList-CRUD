@@ -21,8 +21,8 @@ router.post(
       .trim()
       .notEmpty()
       .withMessage("El texto de la tarea es requerido")
-      .isLength({ max: 255 })
-      .withMessage("El texto no puede tener más de 255 caracteres"),
+      .isLength({ max: 100 })
+      .withMessage("El texto no puede tener más de 100 caracteres"),
     validateRequest,
   ],
   crearTarea,
