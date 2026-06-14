@@ -10,8 +10,10 @@ export const obtenerTareas = async (req, res) => {
 
     res.status(200).json(tareas);
   } catch (error) {
+    // Dejar que el middleware central gestione la respuesta
     console.error("Error al obtener tareas:", error);
-    res.status(500).json({ error: "Error al obtener las tareas" });
+    // forward error
+    throw error;
   }
 };
 
@@ -34,7 +36,7 @@ export const crearTarea = async (req, res) => {
     res.status(201).json(nuevaTarea);
   } catch (error) {
     console.error("Error al crear tarea:", error);
-    res.status(500).json({ error: "Error al crear la tarea" });
+    throw error;
   }
 };
 
@@ -48,7 +50,9 @@ export const actualizarTarea = async (req, res) => {
     const tarea = await Tarea.findByPk(id);
 
     if (!tarea) {
-      return res.status(404).json({ error: "Tarea no encontrada" });
+      const err = new Error("Tarea no encontrada");
+      err.status = 404;
+      throw err;
     }
 
     // Actualizar el estado de la tarea
@@ -57,7 +61,7 @@ export const actualizarTarea = async (req, res) => {
     res.status(200).json(tarea);
   } catch (error) {
     console.error("Error al actualizar tarea:", error);
-    res.status(500).json({ error: "Error al actualizar la tarea" });
+    throw error;
   }
 };
 
@@ -70,7 +74,9 @@ export const eliminarTarea = async (req, res) => {
     const tarea = await Tarea.findByPk(id);
 
     if (!tarea) {
-      return res.status(404).json({ error: "Tarea no encontrada" });
+      const err = new Error("Tarea no encontrada");
+      err.status = 404;
+      throw err;
     }
 
     // Eliminar la tarea
@@ -79,6 +85,6 @@ export const eliminarTarea = async (req, res) => {
     res.status(200).json({ mensaje: "Tarea eliminada correctamente" });
   } catch (error) {
     console.error("Error al eliminar tarea:", error);
-    res.status(500).json({ error: "Error al eliminar la tarea" });
+    throw error;
   }
 };

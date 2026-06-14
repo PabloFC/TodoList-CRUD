@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import sequelize from "./config/db.js";
 import Tarea from "./models/Tarea.js";
 import tareaRoutes from "./routes/tareaRoutes.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -44,6 +45,9 @@ app.get("/health", async (req, res) => {
 // Rutas de la API
 app.use("/api/tareas", tareaRoutes);
 
+// Middleware de manejo de errores (debe ir después de las rutas)
+app.use(errorHandler);
+
 // Sincronización con la base de datos
 const iniciarServidor = async () => {
   let dbConnected = false;
@@ -51,9 +55,15 @@ const iniciarServidor = async () => {
   try {
     await sequelize.authenticate();
     console.log("Conexión a la base de datos establecida correctamente.");
-
-    await sequelize.sync({ alter: true });
-    console.log("Modelos sincronizados con la base de datos.");
+    // Solo sincronizar esquemas en entornos de desarrollo para evitar cambios automáticos en producción
+    if (process.env.NODE_ENV !== "production") {
+      await sequelize.sync({ alter: true });
+      console.log("Modelos sincronizados con la base de datos.");
+    } else {
+      console.log(
+        "Modo producción: no se sincronizan modelos automáticamente.",
+      );
+    }
     dbConnected = true;
   } catch (error) {
     console.warn(
