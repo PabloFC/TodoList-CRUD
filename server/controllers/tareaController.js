@@ -51,7 +51,9 @@ export const actualizarTarea = async (req, res) => {
     }
 
     // Actualizar el estado de la tarea
-    await tarea.update({ completada: completada === true || completada === "true" });
+    await tarea.update({
+      completada: completada === true || completada === "true",
+    });
 
     res.status(200).json(tarea);
   } catch (error) {
